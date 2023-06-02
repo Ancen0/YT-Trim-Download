@@ -40,18 +40,17 @@ elif cutchoice == "Y":
     print(f"Trimmed video saved as {output_name}")
     clip.close()
 
-keepchoice = input("Would you like to keep the full video? Y/N: ")
-
-while keepchoice != "Y" and keepchoice != "N":
-    print("Invalid input")
     keepchoice = input("Would you like to keep the full video? Y/N: ")
 
-if keepchoice == "N":
-    os.remove(filename)
-    print("File deleted")
+    while keepchoice != "Y" and keepchoice != "N":
+        print("Invalid input")
 
-elif keepchoice == "Y":
-    print("File kept")
+    if keepchoice == "N":
+        os.remove(filename)
+        print("File deleted")
+
+    elif keepchoice == "Y":
+        print("File kept")
 
 
 

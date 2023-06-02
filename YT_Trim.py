@@ -1,7 +1,7 @@
 from pytube import YouTube
 from pytube.exceptions import RegexMatchError
 from moviepy.editor import VideoFileClip
-import os
+from pathlib import Path
 import sys
 
 class UserInput:
@@ -37,10 +37,12 @@ class UserInput:
 
 def download_video(name):
     try:
-        user = os.getlogin()
+        user = Path.home().name
         yt = YouTube(name)
         yt = yt.streams.get_highest_resolution()
-        filepath = yt.download(f"C:\\Users\\{user}\\Videos\\")
+        download_path = Path(f"C:/Users/{user}/Videos/")
+        download_path.mkdir(parents=True, exist_ok=True)
+        filepath = yt.download(str(download_path))
         filename = yt.default_filename
         print(f"You have downloaded: {filename}")
         return filepath
@@ -60,14 +62,14 @@ name = download_video(user_input.url)
 
 cutchoice = user_input.cutchoice
 
-user = os.getlogin()
 timestart = user_input.timestart
 timeend = user_input.timeend
 video = VideoFileClip(name)
 clip = video.subclip(timestart, timeend)
 output_name = user_input.output_name + ".mp4"
-output_path = f"C:\\Users\\{user}\\Videos\\" + output_name
-clip.write_videofile(output_path)
+user = Path.home().name
+output_path = Path(f"C:/Users/{user}/Videos/") / output_name
+clip.write_videofile(str(output_path))
 print(f"Trimmed video saved as {output_name}")
 clip.close()
 
@@ -76,7 +78,8 @@ keepchoice = user_input.keepchoice
 if keepchoice == "Y":
     print("File kept")
 elif keepchoice == "N":
-    os.remove(name)
+    name_path = Path(name)
+    name_path.unlink()
     print("File deleted")
 
 
